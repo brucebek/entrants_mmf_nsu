@@ -1,0 +1,3 @@
+TOKEN = '1311565534:AAHFbEAMbCv0MZ2CN9n5uoSZV6X0dkpwKRE'
+
+USERS = 'db/users.json'
