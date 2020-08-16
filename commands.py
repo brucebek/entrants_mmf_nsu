@@ -51,6 +51,7 @@ def get_user(users_f, id):
     if id in users:
         return users[id]
 
+
 @file_open_path(USERS)
 def add_activity(users_f, id, act_name):
     users = json.load(users_f)
@@ -59,14 +60,16 @@ def add_activity(users_f, id, act_name):
     users[id]['activity'].append({'time': act_time, 'action': act_name})
     new_dump(users, users_f)
 
+
 def get_activity(id):
     user = get_user(id)
     if user:
         activity = user['activity']
         return activity
 
-def get_path_list(id, name, flt):
-    html = get_article(flt, name)
+
+def get_path_list(id, direction, name, type_list):
+    html = get_article(direction, name, type_list)
     pth = f'{os.path.abspath(f"db/{id}/{name}.html")}'
     with open(pth, 'w', encoding='utf-8') as list_file:
         list_file.write(html)

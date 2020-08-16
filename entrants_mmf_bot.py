@@ -12,15 +12,14 @@ bot = TeleBot(TOKEN)
 def get_commands():
     markup = InlineKeyboardMarkup()
     markup.row_width = 1
-    markup.add(InlineKeyboardButton('Участвующие в конкурсе на ММФ', callback_data='all'),
-               InlineKeyboardButton('Подавшие согласие на ММФ', callback_data='all_consents'),
-               InlineKeyboardButton('Участвующие в конкурсе на ПМИ', callback_data='amcs'),
+    markup.add(InlineKeyboardButton('Участвующие в конкурсе на ПМИ', callback_data='amcs'),
                InlineKeyboardButton('Подавшие согласие на ПМИ', callback_data='amcs_consents'),
                InlineKeyboardButton('Участвующие в конкурсе на МКН', callback_data='mcs'),
                InlineKeyboardButton('Подавшие согласие на МКН', callback_data='mcs_consents'),
                InlineKeyboardButton('Участвующие в конкурсе на М', callback_data='math'),
                InlineKeyboardButton('Подавшие согласие на М', callback_data='math_consents'),
-               InlineKeyboardButton('Подавшие согласие на ФИТ', callback_data='fit_consents'))
+               InlineKeyboardButton('Участвующие в конкурсе на ИВТ', callback_data='fit'),
+               InlineKeyboardButton('Подавшие согласие на ИВТ', callback_data='fit_consents'))
     return markup
 
 
@@ -50,26 +49,22 @@ def start(message):
 def callback_query(call):
     id_user = str(call.from_user.id)
     filters = {
-        'all': {'filter': lambda e: True, 'name': 'Участвующие в конкурсе на ММФ'},
-        'all_consents': {'filter': lambda e: e['consent'] != 'Информатика и вычислительная техника' and e['consent'],
-                         'name': 'Подавшие согласие на ММФ'},
-        'amcs': {'filter': lambda e: 'ПМИ' in e['directions'], 'name': 'Участвующие в конкурсе на ПМИ'},
-        'amcs_consents': {'filter': lambda e: e['consent'] == 'Прикладная математика и информатика',
-                          'name': 'Подавшие согласие на ПМИ'},
-        'mcs': {'filter': lambda e: 'МКН' in e['directions'], 'name': 'Участвующие в конкурсе на МКН'},
-        'mcs_consents': {'filter': lambda e: e['consent'] == 'Математика и компьютерные науки',
-                         'name': 'Подавшие согласие на МКН'},
-        'math': {'filter': lambda e: 'М' in e['directions'], 'name': 'Участвующие в конкурсе на М'},
-        'math_consents': {'filter': lambda e: e['consent'] == 'Математика', 'name': 'Подавшие согласие на М'},
-        'fit_consents': {'filter': lambda e: e['consent'] == 'Информатика и вычислительная техника',
-                         'name': 'Подавшие согласие на ФИТ'}}
+        'amcs': {'direction': 'ПМИ', 'type_list': 'Конкурс', 'name': 'Участвующие в конкурсе на ПМИ'},
+        'amcs_consents': {'direction': 'ПМИ', 'type_list': 'Зачисление', 'name': 'Подавшие согласие на ПМИ'},
+        'mcs': {'direction': 'МКН', 'type_list': 'Конкурс', 'name': 'Участвующие в конкурсе на МКН'},
+        'mcs_consents': {'direction': 'МКН', 'type_list': 'Зачисление', 'name': 'Подавшие согласие на МКН'},
+        'math': {'direction': 'М', 'type_list': 'Конкурс', 'name': 'Участвующие в конкурсе на М'},
+        'math_consents': {'direction': 'М', 'type_list': 'Зачисление', 'name': 'Подавшие согласие на М'},
+        'fit': {'direction': 'ИВТ', 'type_list': 'Конкурс', 'name': 'Участвующие в конкурсе на ИВТ'},
+        'fit_consents': {'direction': 'ИВТ', 'type_list': 'Зачисление', 'name': 'Подавшие согласие на ИВТ'}}
 
     command = call.data.split('_')
     if command[0] != 'admin':
         add_activity(id_user, filters[call.data]['name'])
         pth = get_path_list(id_user,
+                            filters[call.data]['direction'],
                             filters[call.data]['name'],
-                            filters[call.data]['filter'])
+                            filters[call.data]['type_list'])
         with open(pth, 'rb') as res:
             bot.send_document(call.message.chat.id, res)
         os.remove(pth)
