@@ -58,6 +58,7 @@ def get_article(direction, name, typ):
     es = get_es(fs, type_list[typ], acronyms)
     es = {e: es[e] for e in es if direction in es[e]}
     es_sort = sorted(es, key=lambda x: int(es[x][direction]['number']))
+    es_directions = get_es(fs, 20, acronyms)
 
     with open('base.html', encoding='utf-8') as bs:
         template = BeautifulSoup(bs, 'lxml')
@@ -67,7 +68,7 @@ def get_article(direction, name, typ):
         tr = BeautifulSoup(
             f'<tr><td>{es[name][direction]["number"]}.</td><td>{name} {es[name][direction]["condition"]}</td>'
             f'<td>{es[name][direction]["spt"]}</td>'
-            f'<td>{", ".join(es[name])}</td>'
+            f'<td>{", ".join(es_directions[name])}</td>'
             f'<td>{es[name][direction]["consent"]}</td></tr>', 'lxml')
         template.tbody.append(tr)
     return template.prettify()
