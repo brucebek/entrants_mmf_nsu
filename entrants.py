@@ -27,8 +27,6 @@ def get_es(fs, type_list, acronyms):
 
     for d in ds:
         name_d = d["info"]["speciality"]["name"]
-        if name_d == "Механика и математическое моделирование":
-            continue
         for e in d['table']:
             name = e['name']
             if name not in es:
@@ -52,7 +50,8 @@ def get_article(direction, name, typ):
         'Математика': 'М',
         'Прикладная математика и информатика': 'ПМИ',
         'Математика и компьютерные науки': 'МКН',
-        'Информатика и вычислительная техника': 'ИВТ'
+        'Информатика и вычислительная техника': 'ИВТ',
+        'Механика и математическое моделирование': 'МММ'
     }
 
     es = get_es(fs, type_list[typ], acronyms)

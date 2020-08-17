@@ -19,7 +19,9 @@ def get_commands():
                InlineKeyboardButton('Участвующие в конкурсе на М', callback_data='math'),
                InlineKeyboardButton('Подавшие согласие на М', callback_data='math_consents'),
                InlineKeyboardButton('Участвующие в конкурсе на ИВТ', callback_data='fit'),
-               InlineKeyboardButton('Подавшие согласие на ИВТ', callback_data='fit_consents'))
+               InlineKeyboardButton('Подавшие согласие на ИВТ', callback_data='fit_consents'),
+               InlineKeyboardButton('Участвующие в конкурсе на МММ', callback_data='mmm'),
+               InlineKeyboardButton('Подавшие согласие на МММ', callback_data='mmm_consents'))
     return markup
 
 
@@ -56,7 +58,9 @@ def callback_query(call):
         'math': {'direction': 'М', 'type_list': 'Конкурс', 'name': 'Участвующие в конкурсе на М'},
         'math_consents': {'direction': 'М', 'type_list': 'Зачисление', 'name': 'Подавшие согласие на М'},
         'fit': {'direction': 'ИВТ', 'type_list': 'Конкурс', 'name': 'Участвующие в конкурсе на ИВТ'},
-        'fit_consents': {'direction': 'ИВТ', 'type_list': 'Зачисление', 'name': 'Подавшие согласие на ИВТ'}}
+        'fit_consents': {'direction': 'ИВТ', 'type_list': 'Зачисление', 'name': 'Подавшие согласие на ИВТ'},
+        'mmm': {'direction': 'МММ', 'type_list': 'Конкурс', 'name': 'Участвующие в конкурсе на МММ'},
+        'mmm_consents': {'direction': 'МММ', 'type_list': 'Зачисление', 'name': 'Подавшие согласие на МММ'}}
 
     command = call.data.split('_')
     if command[0] != 'admin':
