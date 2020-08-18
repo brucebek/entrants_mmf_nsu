@@ -64,11 +64,17 @@ def get_article(direction, name, typ):
 
     template.title.string = name
     for name in es_sort:
+        consent = 'Нет'
+        for c in es[name]:
+            if es[name][c]['consent'] != 'Нет':
+                consent = es[name][c]['consent']
+                break
+
         tr = BeautifulSoup(
             f'<tr><td>{es[name][direction]["number"]}.</td><td>{name} {es[name][direction]["condition"]}</td>'
             f'<td>{es[name][direction]["spt"]}</td>'
             f'<td>{", ".join(es_directions[name])}</td>'
-            f'<td>{es[name][direction]["consent"]}</td></tr>', 'lxml')
+            f'<td>{consent}</td></tr>', 'lxml')
         template.tbody.append(tr)
     return template.prettify()
 
